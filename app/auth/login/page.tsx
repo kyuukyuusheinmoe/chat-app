@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import ReCaptcha from "@/app/components/Capcha";
+import Link from "next/link";
 
 const Page = () => {
   return (
@@ -12,9 +14,8 @@ const Page = () => {
         className="w-full p-2 border border-gray-300 rounded mb-4 hover:border-red-400 focus:border-red-400 focus:outline-none"
       />
 
-      {/* Placeholder for Google reCAPTCHA */}
       <div className="flex justify-center mb-4">
-        <div className="w-full h-20 bg-gray-100 border border-gray-300 flex items-center justify-center rounded"></div>
+        <ReCaptcha />
       </div>
 
       <button
@@ -25,10 +26,10 @@ const Page = () => {
 
       <div className="text-center">
         <p>
-          Don't have an account?{" "}
-          <a href="#" className="text-blue-500">
+          Don't have an account?
+          <Link href="/auth/signup" className="ml-2 text-accGreen">
             Sign Up
-          </a>
+          </Link>
         </p>
       </div>
       {/** Horizontal line */}
