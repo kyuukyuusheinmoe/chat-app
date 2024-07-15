@@ -1,7 +1,12 @@
 "use client";
 import Input from "@/app/components/Input";
 import React from "react";
-import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
+import {
+  useForm,
+  FormProvider,
+  SubmitHandler,
+  Controller,
+} from "react-hook-form";
 
 type FormValues = {
   email: string;
@@ -20,13 +25,21 @@ const RegisterForm = () => {
     <FormProvider {...methods}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="lex flex-col max-w-sm items-center justify-center ">
-        <Input {...register("email")} type="email" placeholder="Email" />
-        <Input
-          {...register("password")}
-          type="password"
-          placeholder="Password"
+        className="flex flex-col max-w-sm items-center justify-center ">
+        <Controller
+          name="email"
+          render={({ field }) => (
+            <Input type="email" placeholder="Email" {...field} />
+          )}
         />
+
+        <Controller
+          name="password"
+          render={({ field }) => (
+            <Input type="password" placeholder="Password" {...field} />
+          )}
+        />
+
         <button
           type="submit"
           className="w-full p-2 bg-accGreen text-white rounded mb-4">
