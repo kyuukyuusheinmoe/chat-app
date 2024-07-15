@@ -15,7 +15,7 @@ type FormValues = {
 
 const RegisterForm = () => {
   const methods = useForm<FormValues>({});
-  const { register, handleSubmit } = methods;
+  const { handleSubmit } = methods;
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log("xxx submission data ", data);
