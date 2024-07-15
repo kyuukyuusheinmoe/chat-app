@@ -1,26 +1,50 @@
 import React from "react";
+import Image from "next/image";
 
 const Page = () => {
   return (
-    <div>
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
-        <h1 className="text-2xl mb-4">Login to ChatGPT</h1>
-        <input
-          type="text"
-          placeholder="Username"
-          className="mb-2 p-2 border border-gray-300 rounded"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="mb-2 p-2 border border-gray-300 rounded"
-        />
-        <button
-          //   onClick={handleLogin}
-          className="p-2 bg-blue-500 text-white rounded">
-          Login
-        </button>
+    <div className="flex flex-col max-w-sm items-center justify-center min-h-screen mx-auto bg-white">
+      <Image src="/chat-gpt-black.png" width="40" height="40" alt="logo" />
+      <h1 className="text-2xl my-4 text-center font-bold">Welcome Back</h1>
+      <input
+        type="email"
+        placeholder="Email"
+        className="w-full p-2 border border-gray-300 rounded mb-4 hover:border-red-400 focus:border-red-400 focus:outline-none"
+      />
+
+      {/* Placeholder for Google reCAPTCHA */}
+      <div className="flex justify-center mb-4">
+        <div className="w-full h-20 bg-gray-100 border border-gray-300 flex items-center justify-center rounded"></div>
       </div>
+
+      <button
+        // onClick={handleLogin}
+        className="w-full p-2 bg-accGreen text-white rounded mb-4">
+        Continue
+      </button>
+
+      <div className="text-center">
+        <p>
+          Don't have an account?{" "}
+          <a href="#" className="text-blue-500">
+            Sign Up
+          </a>
+        </p>
+      </div>
+      {/** Horizontal line */}
+      <div className="relative flex py-5 items-center">
+        <div className="flex-grow w-28 border-t border-gray-300"></div>
+        <span className="flex-shrink mx-4 text-gray-500">OR</span>
+        <div className="flex-grow w-28 border-t border-gray-300"></div>
+      </div>
+      <button className="my-2 flex gap-4 items-center w-full h-full p-2 border border-[#C3C8CF] text-[#2E3339] rounded">
+        <Image src="/google.png" width="20" height="20" alt="logo" />
+        Login with Google
+      </button>
+      <button className="my-2 flex gap-4 w-full items-center h-full p-2 border border-[#C3C8CF] text-[#2E3339] rounded">
+        <Image src="/microsoft.png" width="20" height="20" alt="logo" />
+        Login with Microsoft
+      </button>
     </div>
   );
 };
