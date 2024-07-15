@@ -1,17 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
+const AUTH_PATH = "/auth"
 const LOGIN_PATH = "/auth/login"
+const SIGN_UP_PATH = "/auth/signup"
 const HOME_PATH = "/"
 
 
 export default function middleware(request: NextRequest) {
     const token = cookies().get("token")
     switch(request.nextUrl.pathname) {
-        case LOGIN_PATH:  if (token ) {
+        case LOGIN_PATH: 
+        case AUTH_PATH: 
+        case SIGN_UP_PATH:
+         if (token ) {
             return NextResponse.redirect(new URL(HOME_PATH, request.url))
         };break;
-        default: return NextResponse.redirect(new URL(LOGIN_PATH, request.url))
+        
+        default: if (request.nextUrl.pathname !== AUTH_PATH && !token) return NextResponse.redirect(new URL(AUTH_PATH, request.url))
     }
 }
 
