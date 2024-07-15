@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Page = () => {
   return (
@@ -8,16 +9,12 @@ const Page = () => {
       <h4 className=" my-4">Welcome to ChatGPT</h4>
       <h5 className=" mb-4"> Log in with your OpenAI account to continue</h5>
       <div className="flex gap-6">
-        <button
-          //   onClick={handleLogin}
-          className="p-2 bg-accGreen  rounded">
-          Log in
-        </button>
-        <button
-          //   onClick={handleLogin}
-          className="p-2 bg-accGreen  rounded">
-          Sign up
-        </button>
+        <Link href={"/auth/login"}>
+          <button className="p-2 bg-accGreen  rounded">Log in</button>
+        </Link>
+        <Link href={"/auth/signup"}>
+          <button className="p-2 bg-accGreen  rounded">Sign up</button>
+        </Link>
       </div>
     </div>
   );
