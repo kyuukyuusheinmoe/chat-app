@@ -13,12 +13,11 @@ export default function middleware(request: NextRequest) {
         };break;
         default: return NextResponse.redirect(new URL(LOGIN_PATH, request.url))
     }
-
 }
 
 export const config = {
     matcher: [
-      '/((?!api|_next/static|_next/image|favicon.ico|logo.svg|opengraph-image.jpg).*)',
+      '/((?!api|_next/static|_next/image|.*\\..*|next).*)',
     ],
   };
   
