@@ -5,6 +5,7 @@ const AUTH_PATH = "/auth"
 const LOGIN_PATH = "/auth/login"
 const SIGN_UP_PATH = "/auth/signup"
 const HOME_PATH = "/"
+const GOOGLE_CALLBACK_PATH = "/auth/callback/google"
 
 
 export default function middleware(request: NextRequest) {
@@ -16,6 +17,7 @@ export default function middleware(request: NextRequest) {
          if (token ) {
             return NextResponse.redirect(new URL(HOME_PATH, request.url))
         };break;
+        case GOOGLE_CALLBACK_PATH: return;
         
         default: if (request.nextUrl.pathname !== AUTH_PATH && !token) return NextResponse.redirect(new URL(AUTH_PATH, request.url))
     }
