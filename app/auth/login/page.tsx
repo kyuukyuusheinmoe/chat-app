@@ -1,9 +1,12 @@
 import React from "react";
 import Image from "next/image";
-import ReCaptcha from "@/app/components/Capcha";
+import ReCaptcha from "@/components/Capcha";
 import Link from "next/link";
+import { getGoogleUrl } from "@/utils/oauth";
+import OAuthButton from "@/components/Buttons/OAuthButton";
 
 const Page = () => {
+  const googleUrl = getGoogleUrl("/");
   return (
     <div className="flex flex-col max-w-sm items-center justify-center min-h-screen mx-auto bg-white">
       <Image src="/chat-gpt-black.png" width="40" height="40" alt="logo" />
@@ -38,14 +41,16 @@ const Page = () => {
         <span className="flex-shrink mx-4 text-gray-500">OR</span>
         <div className="flex-grow w-28 border-t border-gray-300"></div>
       </div>
-      <button className="my-2 flex gap-4 items-center w-full h-full p-2 border border-[#C3C8CF] text-[#2E3339] rounded">
-        <Image src="/google.png" width="20" height="20" alt="logo" />
-        Login with Google
-      </button>
-      <button className="my-2 flex gap-4 w-full items-center h-full p-2 border border-[#C3C8CF] text-[#2E3339] rounded">
-        <Image src="/microsoft.png" width="20" height="20" alt="logo" />
-        Login with Microsoft
-      </button>
+      <OAuthButton
+        image={"/google.png"}
+        link={googleUrl}
+        label="Log in with Google"
+      />
+      <OAuthButton
+        image={"/microsoft.png"}
+        link={googleUrl}
+        label="Login with Microsoft"
+      />
     </div>
   );
 };
