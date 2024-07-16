@@ -2,9 +2,11 @@ import clsx from "clsx";
 import React from "react";
 
 type InputProps = {
-  type: "email" | "password";
+  type?: "email" | "password" | "hidden";
   placeholder?: string;
   className?: string;
+  name: string;
+  value?: string;
 };
 const Input = ({ type, placeholder, className, ...rest }: InputProps) => {
   return (

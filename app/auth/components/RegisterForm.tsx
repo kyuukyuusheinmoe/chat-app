@@ -1,52 +1,29 @@
-"use client";
-import Input from "@/components/Input";
+import { register } from "@/services/authService";
 import React from "react";
-import {
-  useForm,
-  FormProvider,
-  SubmitHandler,
-  Controller,
-} from "react-hook-form";
+import Input from "@/components/Input";
 
 type FormValues = {
+  name: string;
   email: string;
   password: string;
 };
 
 const RegisterForm = () => {
-  const methods = useForm<FormValues>({});
-  const { handleSubmit } = methods;
-
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log("xxx submission data ", data);
-  };
-
   return (
-    <FormProvider {...methods}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col max-w-sm items-center justify-center ">
-        <Controller
-          name="email"
-          render={({ field }) => (
-            <Input type="email" placeholder="Email" {...field} />
-          )}
-        />
+    <form
+      action={register}
+      className="flex flex-col max-w-sm items-center justify-center ">
+      <Input placeholder="User Name" name="name" />
+      <Input type="email" placeholder="Email" name="email" />
+      <Input type="password" placeholder="Password" name="password" />
+      <Input type="hidden" value="Email" name="provider" />
 
-        <Controller
-          name="password"
-          render={({ field }) => (
-            <Input type="password" placeholder="Password" {...field} />
-          )}
-        />
-
-        <button
-          type="submit"
-          className="w-full p-2 bg-accGreen text-white rounded mb-4">
-          Register
-        </button>
-      </form>
-    </FormProvider>
+      <button
+        type="submit"
+        className="w-full p-2 bg-accGreen text-white rounded mb-4">
+        Register
+      </button>
+    </form>
   );
 };
 

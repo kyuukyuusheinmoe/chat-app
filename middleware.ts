@@ -10,6 +10,7 @@ const GOOGLE_CALLBACK_PATH = "/auth/callback/google"
 
 export default function middleware(request: NextRequest) {
     const token = cookies().get("token")
+    console.log ('xxx middleware token ', token)
     switch(request.nextUrl.pathname) {
         case LOGIN_PATH: 
         case AUTH_PATH: 
