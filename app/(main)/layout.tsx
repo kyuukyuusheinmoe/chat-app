@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
-import SideBar from "@/containers/SideBar";
-import MainContentArea from "@/containers/MainContentArea";
-import clsx from "clsx";
+import ClientLayout from "@/containers/ClientLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,9 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={clsx(inter.className, "flex")}>
-        <SideBar />
-        <MainContentArea />
+      <body className={(inter.className, "flex")}>
+        <ClientLayout />
       </body>
     </html>
   );

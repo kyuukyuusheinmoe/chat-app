@@ -1,17 +1,22 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Input from "../components/Input";
 import { friendListFetcher } from "@/services/userService";
+import { updateActiveRoom } from "@/store/ChatRoomReducer";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 const SideSearchContainer = () => {
   const [inputValue, setInputValue] = useState("");
   const [friendList, setFriendList] = useState([]);
+  const activeRoom = useSelector((state: RootState) => state.chatRoom);
 
   const handleFriendList = async () => {
     setTimeout(async () => {
       if (inputValue.length > 2) {
         const result = await friendListFetcher(inputValue);
-        setFriendList(result.data);
+        if (result.success) {
+          setFriendList(result.data);
+        }
       }
     }, 2000);
   };
@@ -22,10 +27,10 @@ const SideSearchContainer = () => {
 
   return (
     <div>
-      <Input
+      <input
         value={inputValue}
         name="searchInput"
-        onChange={(value) => setInputValue(value)}
+        onChange={(e) => setInputValue(e.target.value)}
         className="w-full p-4 border border-[#303139] rounded bg-[#40414E] focus:outline-none text-white"
         placeholder="Type something..."
       />

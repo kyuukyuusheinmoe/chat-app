@@ -26,16 +26,14 @@ export const register = async (formData: any) => {
 export const login = async (formData: any) => {
     const body = {email: formData.get("email"),}
 
-    console.log ('xxx login body ', body)
-
     const res = await fetch(`${process.env.API_URL}/auth/login`, {
         ...requestOptions,
         body: JSON.stringify(body)
     });
     const result = await res.json();
 
-    console.log ('xxx login result ', result)
     if (result.statusCode === 200 && result?.token) {
+        console.log ('xxx login result ', result.token)
         cookies().set("token", result.token)
         redirect("/")
     } 
