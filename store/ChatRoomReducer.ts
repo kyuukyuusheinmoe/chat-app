@@ -1,7 +1,15 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
+import { createSlice } from '@reduxjs/toolkit';
+type UserProp = {
+  id: number,
+  name: string
+}
+type ChatRoomProp = {
+  id: number,
+  name: string,
+  members: UserProp[]
+}
 interface ChatRoomState {
-  activeRoom: number | null;
+  activeRoom: ChatRoomProp | null;
 }
 
 const initialState: ChatRoomState = {
@@ -12,9 +20,10 @@ const chatRoomSlice = createSlice({
   name: 'chatRoom',
   initialState,
   reducers: {
-    updateActiveRoom: (state, action) => ({
-      ...state, activeRoom: action?.payload?.activeRoom
-    }),
+    updateActiveRoom: (state, action) => {
+      return ({
+      ...state, activeRoom: action?.payload
+    })},
   },
 });
 
