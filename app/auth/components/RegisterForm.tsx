@@ -16,7 +16,7 @@ const RegisterForm = () => {
       <Input placeholder="User Name" name="name" />
       <Input type="email" placeholder="Email" name="email" />
       <Input type="password" placeholder="Password" name="password" />
-      <Input type="hidden" value="Email" name="provider" />
+      <Input type="hidden" value="EMAIL" name="provider" />
 
       <button
         type="submit"
