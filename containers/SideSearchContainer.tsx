@@ -2,13 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { friendListFetcher } from "@/services/userService";
 import { updateActiveRoom } from "@/store/ChatRoomReducer";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
+import { createChatRoom } from "@/services/chatRoomService";
 
 const SideSearchContainer = () => {
   const [inputValue, setInputValue] = useState("");
   const [friendList, setFriendList] = useState([]);
   const activeRoom = useSelector((state: RootState) => state.chatRoom);
+  const dispatch = useDispatch();
 
   const handleFriendList = async () => {
     setTimeout(async () => {
@@ -25,6 +27,20 @@ const SideSearchContainer = () => {
     handleFriendList();
   }, [inputValue]);
 
+  const handleUserItemClick = async (user: {
+    id: number;
+    name?: string;
+    email: string;
+  }) => {
+    const res = await createChatRoom({
+      name: `Group with ${user?.name || user.email}`,
+      members: [user.id],
+    });
+    if (res.success) {
+      dispatch(updateActiveRoom(res.data));
+    }
+  };
+
   return (
     <div>
       <input
@@ -39,6 +55,7 @@ const SideSearchContainer = () => {
           {friendList.map(
             (user: { id: number; name?: string; email: string }) => (
               <li
+                onClick={(id) => handleUserItemClick(user)}
                 className="p-2 bg-gray-700 rounded cursor-pointer hover:bg-gray-600 truncate"
                 key={user.id}>
                 {user?.name || user.email}
