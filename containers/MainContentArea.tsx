@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { socket } from "@/utils/socketClient";
 
 const MainContentArea = () => {
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to Socket.IO server");
+    });
+  }, []);
   return (
     <div className="bg-middle flex-grow flex flex-col relative">
       <div className="flex-grow p-4 overflow-y-auto">
