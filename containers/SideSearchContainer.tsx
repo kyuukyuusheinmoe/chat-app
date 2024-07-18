@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { friendListFetcher } from "@/services/userService";
+import { userListFetcher } from "@/services/userService";
 import { updateActiveRoom } from "@/store/ChatRoomReducer";
 import { useDispatch } from "react-redux";
 import { createChatRoom } from "@/services/chatRoomService";
@@ -13,7 +13,7 @@ const SideSearchContainer = () => {
   const handleFriendList = async () => {
     setTimeout(async () => {
       if (inputValue.length > 2) {
-        const result = await friendListFetcher(inputValue);
+        const result = await userListFetcher(inputValue);
         if (result.success) {
           setFriendList(result.data);
         }
@@ -49,12 +49,12 @@ const SideSearchContainer = () => {
         placeholder="Type something..."
       />
       <div className="flex-grow overflow-y-auto">
-        <ul id="chatHistory" className="p-4 space-y-2">
+        <ul id="chatHistory" className="p-2 space-y-2">
           {friendList.map(
             (user: { id: number; name?: string; email: string }) => (
               <li
                 onClick={(id) => handleUserItemClick(user)}
-                className="p-2 bg-gray-700 rounded cursor-pointer hover:bg-gray-600 truncate"
+                className="p-2 bg-grayIc rounded cursor-pointer hover:bg-gray-600 truncate"
                 key={user.id}>
                 {user?.name || user.email}
               </li>
