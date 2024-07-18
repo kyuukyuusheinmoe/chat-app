@@ -9,6 +9,8 @@ import {
 } from "@/services/socketService";
 import { RootState } from "@/store";
 import { handleSendMessage } from "@/services/socketService";
+import ChatMessage from "@/components/ChatMessage";
+import MessageListContainer from "./MessageListContainer";
 
 const MainContentArea = () => {
   const { activeRoom } = useSelector((state: RootState) => state.chatRoom);
@@ -30,29 +32,33 @@ const MainContentArea = () => {
     if (activeRoom) {
       // connectToSocketServer();
       // handleGroupJoinEvent(activeRoom.id);
-      handleSendMessage({
-        groupId: activeRoom.id,
-        content: "No Message",
-        receiverId: activeRoom?.members?.[0].id,
-      });
     }
     // handleIncomingMessage();
   }, [activeRoom]);
 
   const onSendMessage = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (activeRoom?.members && activeRoom?.members.length > 0) {
-      console.log("xxx onSendMessage ", activeRoom?.members[0]?.id);
+    if (
+      activeRoom?.members &&
+      activeRoom?.members.length > 0 &&
+      inputRef?.current?.value
+    ) {
+      console.log("xxx onSendMessage ", inputRef?.current?.value);
+      handleSendMessage({
+        groupId: activeRoom.id,
+        content: inputRef?.current?.value || "No Message",
+        receiverId: activeRoom?.members?.[0].id,
+      });
+      inputRef.current.value = "";
     }
   };
 
   return (
-    <div className="bg-middle flex-grow flex flex-col relative">
-      <div className="flex-grow p-4 overflow-y-auto">
-        <h1 className="text-white text-xl"> {message} </h1>
-      </div>
+    <div className="h-screen bg-middle flex flex-col relative">
+      {/** Chat Message List */}
+      <MessageListContainer />
       <div className="w-[80%] mx-auto mb-10">
-        <div className="flex">
+        <div className="flex items-center relative">
           <input
             ref={inputRef}
             type="text"
@@ -60,9 +66,10 @@ const MainContentArea = () => {
             className="w-full p-4 border border-[#303139] rounded bg-[#40414E] focus:outline-none text-white"
             placeholder="Type your message here..."
           />
-          <button className="p-2 bg-accGreen  rounded" onClick={onSendMessage}>
-            {" "}
-            Send{" "}
+          <button
+            className="absolute right-4 p-2 bg-accGreen  rounded"
+            onClick={onSendMessage}>
+            Send
           </button>
         </div>
 
