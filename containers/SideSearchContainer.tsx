@@ -2,14 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { friendListFetcher } from "@/services/userService";
 import { updateActiveRoom } from "@/store/ChatRoomReducer";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/store";
+import { useDispatch } from "react-redux";
 import { createChatRoom } from "@/services/chatRoomService";
 
 const SideSearchContainer = () => {
   const [inputValue, setInputValue] = useState("");
   const [friendList, setFriendList] = useState([]);
-  const activeRoom = useSelector((state: RootState) => state.chatRoom);
   const dispatch = useDispatch();
 
   const handleFriendList = async () => {

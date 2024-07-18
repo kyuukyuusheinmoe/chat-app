@@ -8,7 +8,6 @@ export const friendListFetcher = async (searchString: string) => {
         const res = await fetch(`${process.env.API_URL}/users?searchString=${searchString}`, requestOptions)
         const result = await res.json()
 
-        console.log ('xxx friend list res ', res)
         if (result.statusCode === 401) {
             redirect("/auth/login")
         }
