@@ -57,7 +57,7 @@ const MainContentArea = () => {
     <div className="h-screen bg-middle flex flex-col relative">
       {/** Chat Message List */}
       <MessageListContainer />
-      <div className="w-[80%] mx-auto mb-10">
+      <div className="w-[80%] mx-auto my-10">
         <div className="flex items-center relative">
           <input
             ref={inputRef}
@@ -73,7 +73,7 @@ const MainContentArea = () => {
           </button>
         </div>
 
-        <p className="text-grayFP">
+        <p className="text-grayFP text-sm">
           ChatGPT Jan 9 Version. Free Research Preview. Our goal is to make AI
           systems more natural and safe to interact with. Your feedback will
           help us improve.
