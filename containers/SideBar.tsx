@@ -1,9 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import SideSearchContainer from "./SideSearchContainer";
+import FriendListContainer from "./FriendListContainer";
+import useSWR from "swr";
+import { friendListFetcher } from "@/services/userService";
 
-const SideBar = () => {
+const SideBar = ({}) => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  const { data } = useSWR("/group/user", friendListFetcher);
+
+  console.log("xxx swr data ", data);
 
   return (
     <div
@@ -47,16 +54,7 @@ const SideBar = () => {
             New Chat
           </button>
           <div className="flex-grow overflow-y-auto">
-            <ul id="chatHistory" className="p-4 space-y-2">
-              {/**<!-- Chat history items will go here --> **/}
-              <li className="p-2 bg-gray-700 rounded cursor-pointer hover:bg-gray-600">
-                Chat 1
-              </li>
-              <li className="p-2 bg-gray-700 rounded cursor-pointer hover:bg-gray-600">
-                Chat 2
-              </li>
-              {/**<!-- Add more chat items as needed -->**/}
-            </ul>
+            <FriendListContainer data={data?.data || []} />
           </div>
         </>
       ) : (
