@@ -10,7 +10,6 @@ const generateCsrfToken = (): string => {
 
 export const getGoogleUrl = (from: string) => {
   const csrfToken = generateCsrfToken()
-  console.log ("xxx csrfToken ", csrfToken)
   if (isClient) sessionStorage.setItem(CSRF_TOKEN, csrfToken)
     const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
     const options = {

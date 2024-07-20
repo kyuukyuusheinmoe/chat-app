@@ -9,7 +9,6 @@ const useSocket = (url: string) => {
       /(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/,
       "$1"
     );
-    console.log("xxx token ", token);
     const connectSocket = () => {
       socket.current = io(url, {
         transports: ["websocket"],

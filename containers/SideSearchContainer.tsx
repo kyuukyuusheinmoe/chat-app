@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { createChatRoom } from "@/services/chatRoomService";
 import { IoMdCheckmark } from "react-icons/io";
 
+type BaseUser = { id: number; name?: string; email: string };
 type SideSearchContainerProps = {
   onSearchHandle: (status: boolean) => void;
   friendListMutate: any;
@@ -16,7 +17,7 @@ const SideSearchContainer = ({
   friendListMutate,
 }: SideSearchContainerProps) => {
   const [inputValue, setInputValue] = useState("");
-  const [friendList, setFriendList] = useState([]);
+  const [friendList, setFriendList] = useState<BaseUser[]>([]);
   const [selectedFriends, setSelectedFriends] = useState<number[]>([]);
   const dispatch = useDispatch();
 
@@ -37,7 +38,9 @@ const SideSearchContainer = ({
 
   const handleCreateRoom = async () => {
     const res = await createChatRoom({
-      name: `Group with ${selectedFriends?.join(",")}`,
+      name: `Group with ${selectedFriends
+        ?.map((id) => friendList[id].name)
+        ?.join(",")}`,
       members: selectedFriends,
     });
     if (res.success) {
@@ -60,25 +63,23 @@ const SideSearchContainer = ({
         <>
           <div className="flex-grow overflow-y-auto">
             <ul id="chatHistory" className="p-2 space-y-2">
-              {friendList.map(
-                (user: { id: number; name?: string; email: string }) => (
-                  <li
-                    onClick={() => {
-                      setSelectedFriends((friends) =>
-                        friends.includes(user.id)
-                          ? friends.filter((f) => f !== user.id)
-                          : [...friends, user.id]
-                      );
-                    }}
-                    className="flex justify-between p-2 bg-gray-600 rounded cursor-pointer"
-                    key={user.id}>
-                    <div className="w-4/5 truncate">
-                      {user?.name || user.email}
-                    </div>
-                    {selectedFriends.includes(user.id) && <IoMdCheckmark />}
-                  </li>
-                )
-              )}
+              {friendList.map((user: BaseUser) => (
+                <li
+                  onClick={() => {
+                    setSelectedFriends((friends) =>
+                      friends.includes(user.id)
+                        ? friends.filter((f) => f !== user.id)
+                        : [...friends, user.id]
+                    );
+                  }}
+                  className="flex justify-between p-2 bg-gray-600 rounded cursor-pointer"
+                  key={user.id}>
+                  <div className="w-4/5 truncate">
+                    {user?.name || user.email}
+                  </div>
+                  {selectedFriends.includes(user.id) && <IoMdCheckmark />}
+                </li>
+              ))}
             </ul>
           </div>
           <div className="flex justify-between px-4">

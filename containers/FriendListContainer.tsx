@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { updateRooms, updateActiveRoom } from "@/store/ChatRoomReducer";
+import { updateActiveRoom } from "@/store/ChatRoomReducer";
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import { RootState } from "@/store";
@@ -12,9 +12,7 @@ const FriendListContainer = ({
   data: { id: number; name?: string | undefined; email: string }[];
 }) => {
   const dispatch = useDispatch();
-  const { rooms, activeRoom } = useSelector(
-    (state: RootState) => state.chatRoom
-  );
+  const { activeRoom } = useSelector((state: RootState) => state.chatRoom);
   const { data: messages } = useSWR(
     activeRoom?.id ? `/message/${activeRoom?.id}` : null,
     messageListFetcher,

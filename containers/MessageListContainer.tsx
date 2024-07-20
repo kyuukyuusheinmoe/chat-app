@@ -5,8 +5,6 @@ import clsx from "clsx";
 import { MessageProp } from "@/utils/types";
 
 const MessageListContainer = ({ messages }: { messages: MessageProp[] }) => {
-  console.log("xxx MessageListContainer ", messages);
-
   const formatMessage = () => {
     if (messages?.length > 0) {
       const messagesWithDate = messages.map((m: any) => ({

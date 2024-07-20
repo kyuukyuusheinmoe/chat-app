@@ -17,8 +17,6 @@ const SideBar = ({}) => {
     }
   );
 
-  console.log("xxx swr data ", data);
-
   const onSearchHandle = (searchingStatus: boolean) => {
     setIsSearching(searchingStatus);
   };

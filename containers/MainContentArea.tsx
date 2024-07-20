@@ -4,14 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { disconnectFromSocketServer } from "@/services/socketService";
 import { RootState } from "@/store";
 import MessageListContainer from "./MessageListContainer";
-import { updateActiveRoom, updateMessages } from "@/store/ChatRoomReducer";
 import useSocket from "@/hooks/useSocket";
 import { MessageProp } from "@/utils/types";
-import useSWR from "swr";
-import { messageListFetcher } from "@/services/messageService";
 
 const MainContentArea = () => {
-  const { rooms, activeRoom } = useSelector(
+  const {activeRoom } = useSelector(
     (state: RootState) => state.chatRoom
   );
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,13 +19,10 @@ const MainContentArea = () => {
 
   const socket = useSocket("http://localhost:5000");
 
-  console.log("xxx localmessages ", localmessages);
-
   useEffect(() => {
     if (!socket.current) return;
 
     socket.current.on("my_message", (message: MessageProp) => {
-      console.log("xxx dispatching message ", message);
 
       setLocalMessages((messages) => [...messages, message]);
     });
@@ -39,7 +33,6 @@ const MainContentArea = () => {
   }, []);
 
   const handleSendMessage = (data: any) => {
-    console.log("xxx sending data ", data);
     socket.current.emit("message", data);
   };
 
