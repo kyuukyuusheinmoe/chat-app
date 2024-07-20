@@ -1,7 +1,14 @@
 import React from "react";
 
-const ChatMessage = ({ name, message }: { name: string; message: string }) => {
-  const initial = name.charAt(0).toUpperCase();
+const ChatMessage = ({
+  name,
+  message,
+}: {
+  name: string;
+  message: string;
+}) => {
+  const initial =  name.charAt(0).toUpperCase()
+    
 
   return (
     <div className="flex items-center space-x-4 p-4">
