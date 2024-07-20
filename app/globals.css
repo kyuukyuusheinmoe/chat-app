@@ -20,4 +20,11 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .custom-rechaptcha>div>div {
+    width: 24rem !important;
+  }
+
+  .custom-rechaptcha>div>iframe {
+    width: 24rem !important;
+  }
 }

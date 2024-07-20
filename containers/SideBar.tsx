@@ -10,7 +10,11 @@ const SideBar = ({}) => {
 
   const { data, mutate: friendListMutate } = useSWR(
     "/group/user",
-    friendListFetcher
+    friendListFetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
   );
 
   console.log("xxx swr data ", data);
@@ -22,8 +26,8 @@ const SideBar = ({}) => {
   return (
     <div
       id="sidebar"
-      className="bg-[#202123] text-white h-screen w-64 min-w-64 flex flex-col transition-transform duration-300 transform sidebar-hidden">
-      <div className="flex items-center justify-between p-4">
+      className="hidden bg-[#202123] text-white h-screen w-64 min-w-64 lg:flex flex-col transition-transform duration-300 transform sidebar-hidden">
+      <div className=" flex items-center justify-between p-4">
         <h1 className="text-xl font-bold">Chats</h1>
         <button id="toggleSidebar" className="text-gray-300 hover:text-white">
           <svg
