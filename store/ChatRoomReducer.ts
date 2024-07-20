@@ -30,15 +30,17 @@ const chatRoomSlice = createSlice({
     })},
     updateActiveRoom: (state, action) => {
       return ({
-      ...state, activeRoom: action?.payload
+      ...state, activeRoom: {...state.activeRoom, ...action?.payload}
     })},
     updateMessages: (state, action) => {
       if (action.payload?.roomId)  {
-        console.log ('xxx updateMessages ', action.payload)
         const selectedRoom = state.rooms.find(room=> room.id === action.payload?.roomId)
         const newRooms = [...state.rooms.filter(room=> room.id !== action.payload?.roomId), {...selectedRoom, messages: action.payload?.messages || []}]
+
+        console.log ('xxx action.payload, newRooms ', action.payload, newRooms)
+
         return ({
-          ...state, rooms: newRooms,
+          ...state, rooms: newRooms, activeRoom: {...state.activeRoom, messages: state.activeRoom?.id === action.payload.roomId ? action.payload.messages : state.activeRoom?.messages},
         })
       }
       },

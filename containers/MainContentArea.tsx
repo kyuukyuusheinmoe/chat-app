@@ -16,28 +16,21 @@ const MainContentArea = () => {
   );
   const inputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
+  const [localmessages, setLocalMessages] = useState<MessageProp[]>(
+    activeRoom?.messages || []
+  );
 
   const socket = useSocket("http://localhost:5000");
 
-  const messages = activeRoom?.messages || [];
-
-  const { data } = useSWR(
-    activeRoom?.id ? `/message/${activeRoom?.id}` : null,
-    messageListFetcher
-  );
+  console.log("xxx localmessages ", localmessages);
 
   useEffect(() => {
     if (!socket.current) return;
 
     socket.current.on("my_message", (message: MessageProp) => {
       console.log("xxx dispatching message ", message);
-      const room = rooms.find((r: any) => r.id === message.groupId);
-      dispatch(
-        updateMessages({
-          roomId: message.groupId,
-          messages: [room?.messages || message],
-        })
-      );
+
+      setLocalMessages((messages) => [...messages, message]);
     });
 
     return () => {
@@ -45,19 +38,10 @@ const MainContentArea = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (activeRoom?.id) {
-      dispatch(
-        updateMessages({ roomId: activeRoom.id, message: data?.data || [] })
-      );
-    }
-  }, [data]);
-
   const handleSendMessage = (data: any) => {
     console.log("xxx sending data ", data);
     socket.current.emit("message", data);
   };
-  console.log("xxx global rooms  ", rooms, activeRoom);
 
   const onSendMessage = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -75,11 +59,21 @@ const MainContentArea = () => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [localmessages]);
+
   return (
     <div className="h-screen bg-middle flex flex-col relative">
       {/** Chat Message List */}
 
-      <MessageListContainer messages={messages} />
+      <MessageListContainer
+        messages={[
+          // ...(activeRoom?.messages || []),
+          // ...localmessages,
+          ...localmessages.filter((m) => m.groupId === activeRoom?.id),
+        ]}
+      />
       <div className="w-[80%] mx-auto my-10">
         <div className="flex items-center relative">
           <input

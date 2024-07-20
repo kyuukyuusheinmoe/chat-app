@@ -11,13 +11,13 @@ const MessageListContainer = ({ messages }: { messages: MessageProp[] }) => {
     if (messages?.length > 0) {
       const messagesWithDate = messages.map((m: any) => ({
         ...m,
-        createdAt: moment(m.createdAt).format("YYYY-MM-DD"),
+        createdAt: m?.createdAt
+          ? moment(m.createdAt).format("YYYY-MM-DD")
+          : moment().format("YYYY-MM-DD"),
       }));
 
       return messagesWithDate?.reduce(
         (acc: { [key: string]: MessageProp[] }, item: MessageProp) => {
-          console.log("xxx acc ", item.createdAt);
-
           if (acc?.[item.createdAt]) {
             acc[item.createdAt] = [...acc[item.createdAt], item];
           } else {

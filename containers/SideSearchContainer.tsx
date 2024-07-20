@@ -8,10 +8,13 @@ import { IoMdCheckmark } from "react-icons/io";
 
 type SideSearchContainerProps = {
   onSearchHandle: (status: boolean) => void;
-  friendListMutate: any
+  friendListMutate: any;
 };
 
-const SideSearchContainer = ({ onSearchHandle, friendListMutate }: SideSearchContainerProps) => {
+const SideSearchContainer = ({
+  onSearchHandle,
+  friendListMutate,
+}: SideSearchContainerProps) => {
   const [inputValue, setInputValue] = useState("");
   const [friendList, setFriendList] = useState([]);
   const [selectedFriends, setSelectedFriends] = useState<number[]>([]);
@@ -19,7 +22,7 @@ const SideSearchContainer = ({ onSearchHandle, friendListMutate }: SideSearchCon
 
   const handleFriendList = async () => {
     setTimeout(async () => {
-      if (inputValue.length > 2) {
+      if (inputValue.length > 1) {
         const result = await userListFetcher(inputValue);
         if (result.success) {
           setFriendList(result.data);
@@ -39,9 +42,8 @@ const SideSearchContainer = ({ onSearchHandle, friendListMutate }: SideSearchCon
     });
     if (res.success) {
       dispatch(updateActiveRoom(res.data));
-      friendListMutate()
+      friendListMutate();
       onSearchHandle(false);
-
     }
   };
 
