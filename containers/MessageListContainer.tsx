@@ -1,19 +1,11 @@
 import ChatMessage from "@/components/ChatMessage";
 import React from "react";
-import useSWR from "swr";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store";
 import moment from "moment";
 import clsx from "clsx";
 import { MessageProp } from "@/utils/types";
 
 const MessageListContainer = ({ messages }: { messages: MessageProp[] }) => {
   console.log("xxx MessageListContainer ", messages);
-  const { activeRoom } = useSelector((state: RootState) => state.chatRoom);
-  // const { data } = useSWR(
-  //   activeRoom?.id ? `/message/${activeRoom?.id}` : null,
-  //   messageListFetcher
-  // );
 
   const formatMessage = () => {
     if (messages?.length > 0) {

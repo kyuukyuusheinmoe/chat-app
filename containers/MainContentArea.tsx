@@ -1,50 +1,63 @@
 "use client";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import {
-  disconnectFromSocketServer,
-  handleGroupJoinEvent,
-} from "@/services/socketService";
+import { useSelector, useDispatch } from "react-redux";
+import { disconnectFromSocketServer } from "@/services/socketService";
 import { RootState } from "@/store";
 import MessageListContainer from "./MessageListContainer";
-import io from "socket.io-client";
+import { updateActiveRoom, updateMessages } from "@/store/ChatRoomReducer";
 import useSocket from "@/hooks/useSocket";
 import { MessageProp } from "@/utils/types";
+import useSWR from "swr";
+import { messageListFetcher } from "@/services/messageService";
 
 const MainContentArea = () => {
-  const { activeRoom } = useSelector((state: RootState) => state.chatRoom);
+  const { rooms, activeRoom } = useSelector(
+    (state: RootState) => state.chatRoom
+  );
   const inputRef = useRef<HTMLInputElement>(null);
-  const [messages, setMessages] = useState<MessageProp[]>([]);
-  
+  const dispatch = useDispatch();
+
   const socket = useSocket("http://localhost:5000");
 
-  console.log("xxx socket ", socket);
+  const messages = activeRoom?.messages || [];
+
+  const { data } = useSWR(
+    activeRoom?.id ? `/message/${activeRoom?.id}` : null,
+    messageListFetcher
+  );
 
   useEffect(() => {
     if (!socket.current) return;
-    let mounted = true;
-    // handleMessage();
 
     socket.current.on("my_message", (message: MessageProp) => {
-      console.log("xxx message received --- ", message);
-      setMessages((msgs) => {
-        const newMessages = [...msgs, message];
-        console.log("Updated messages array:", newMessages); // Log updated messages array
-        return newMessages;
-      });
+      console.log("xxx dispatching message ", message);
+      const room = rooms.find((r: any) => r.id === message.groupId);
+      dispatch(
+        updateMessages({
+          roomId: message.groupId,
+          messages: [room?.messages || message],
+        })
+      );
     });
 
     return () => {
-      mounted = false;
       disconnectFromSocketServer();
     };
   }, []);
 
+  useEffect(() => {
+    if (activeRoom?.id) {
+      dispatch(
+        updateMessages({ roomId: activeRoom.id, message: data?.data || [] })
+      );
+    }
+  }, [data]);
 
   const handleSendMessage = (data: any) => {
     console.log("xxx sending data ", data);
     socket.current.emit("message", data);
   };
+  console.log("xxx global rooms  ", rooms, activeRoom);
 
   const onSendMessage = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();

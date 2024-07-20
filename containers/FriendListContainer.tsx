@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import { updateActiveRoom } from "@/store/ChatRoomReducer";
+import { updateRooms, updateActiveRoom } from "@/store/ChatRoomReducer";
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import { RootState } from "@/store";
+
 
 const FriendListContainer = ({
   data,
@@ -14,7 +15,7 @@ const FriendListContainer = ({
 
   useEffect(() => {
     if (data.length > 0) {
-      dispatch(updateActiveRoom(data[0]));
+      dispatch(updateRooms(data));
     }
   }, [data]);
 

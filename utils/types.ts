@@ -3,5 +3,6 @@ export type MessageProp = {
     content: string;
     createdAt: string;
     Sender: { name: string };
-    self: boolean
+    self: boolean;
+    groupId: number
   };
