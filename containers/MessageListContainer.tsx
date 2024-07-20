@@ -3,45 +3,43 @@ import React from "react";
 import useSWR from "swr";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { messageListFetcher } from "@/services/messageService";
 import moment from "moment";
-import clsx from 'clsx'
+import clsx from "clsx";
+import { MessageProp } from "@/utils/types";
 
-type MessageProp = {
-  id: number;
-  content: string;
-  createdAt: string;
-  Sender: { name: string };
-};
-const MessageListContainer = () => {
+const MessageListContainer = ({ messages }: { messages: MessageProp[] }) => {
+  console.log("xxx MessageListContainer ", messages);
   const { activeRoom } = useSelector((state: RootState) => state.chatRoom);
-  const { data } = useSWR(
-    activeRoom?.id ? `/message/${activeRoom?.id}` : null,
-    messageListFetcher
-  );
+  // const { data } = useSWR(
+  //   activeRoom?.id ? `/message/${activeRoom?.id}` : null,
+  //   messageListFetcher
+  // );
 
   const formatMessage = () => {
-    const messagesWithDate = data?.data?.map((m: any) => ({
-      ...m,
-      createdAt: moment(m.createdAt).format("YYYY-MM-DD"),
-    }));
+    if (messages?.length > 0) {
+      const messagesWithDate = messages.map((m: any) => ({
+        ...m,
+        createdAt: moment(m.createdAt).format("YYYY-MM-DD"),
+      }));
 
-    return messagesWithDate?.reduce(
-      (acc: { [key: string]: MessageProp[] }, item: MessageProp) => {
-        if (acc?.[item.createdAt]) {
-          acc[item.createdAt] = [...acc[item.createdAt], item];
-        } else {
-          acc = { [item.createdAt]: [item] };
-          console.log("xxx acc for first time ", acc);
-        }
-        return acc;
-      }
-    );
+      return messagesWithDate?.reduce(
+        (acc: { [key: string]: MessageProp[] }, item: MessageProp) => {
+          console.log("xxx acc ", item.createdAt);
+
+          if (acc?.[item.createdAt]) {
+            acc[item.createdAt] = [...acc[item.createdAt], item];
+          } else {
+            acc[item.createdAt] = [item];
+          }
+          return acc;
+        },
+        {}
+      );
+    }
+    return {};
   };
 
   const messageGroups: { [key: string]: MessageProp[] } = formatMessage();
-
-  console.log("xxx messageGroups ", messageGroups);
 
   return (
     <div className="h-4/5 overflow-y-scroll">
@@ -59,7 +57,10 @@ const MessageListContainer = () => {
                   className={clsx("flex items-center space-x-4 p-4", {
                     "flex-row-reverse": m.self,
                   })}>
-                  <ChatMessage name={m.Sender.name} message={m.content} />
+                  <ChatMessage
+                    name={m.Sender?.name || m.name || "U"}
+                    message={m.content}
+                  />
                 </div>
               ))}
             </>
