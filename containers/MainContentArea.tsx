@@ -4,37 +4,47 @@ import { useSelector } from "react-redux";
 import {
   disconnectFromSocketServer,
   handleGroupJoinEvent,
-  connectToSocketServer,
-  handleIncomingMessage,
 } from "@/services/socketService";
 import { RootState } from "@/store";
-import { handleSendMessage } from "@/services/socketService";
-import ChatMessage from "@/components/ChatMessage";
 import MessageListContainer from "./MessageListContainer";
+import io from "socket.io-client";
+import useSocket from "@/hooks/useSocket";
+import { MessageProp } from "@/utils/types";
 
 const MainContentArea = () => {
   const { activeRoom } = useSelector((state: RootState) => state.chatRoom);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<MessageProp[]>([]);
+  
+  const socket = useSocket("http://localhost:5000");
 
-  const handleGroupJoin = async (groupId: number) => {
-    console.log("xxx handleSocket");
-    handleGroupJoinEvent(groupId);
-  };
-
-  console.log("xxx activeRoom ", activeRoom);
-
-  const handleMessage = () => {
-    setMessage(message);
-  };
+  console.log("xxx socket ", socket);
 
   useEffect(() => {
-    if (activeRoom) {
-      // connectToSocketServer();
-      // handleGroupJoinEvent(activeRoom.id);
-    }
-    // handleIncomingMessage();
-  }, [activeRoom]);
+    if (!socket.current) return;
+    let mounted = true;
+    // handleMessage();
+
+    socket.current.on("my_message", (message: MessageProp) => {
+      console.log("xxx message received --- ", message);
+      setMessages((msgs) => {
+        const newMessages = [...msgs, message];
+        console.log("Updated messages array:", newMessages); // Log updated messages array
+        return newMessages;
+      });
+    });
+
+    return () => {
+      mounted = false;
+      disconnectFromSocketServer();
+    };
+  }, []);
+
+
+  const handleSendMessage = (data: any) => {
+    console.log("xxx sending data ", data);
+    socket.current.emit("message", data);
+  };
 
   const onSendMessage = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -43,11 +53,10 @@ const MainContentArea = () => {
       activeRoom?.members.length > 0 &&
       inputRef?.current?.value
     ) {
-      console.log("xxx onSendMessage ", inputRef?.current?.value);
       handleSendMessage({
         groupId: activeRoom.id,
         content: inputRef?.current?.value || "No Message",
-        receiverId: activeRoom?.members?.[0].id,
+        receiverIds: activeRoom?.members?.map((m) => m.id),
       });
       inputRef.current.value = "";
     }
@@ -56,7 +65,8 @@ const MainContentArea = () => {
   return (
     <div className="h-screen bg-middle flex flex-col relative">
       {/** Chat Message List */}
-      <MessageListContainer />
+
+      <MessageListContainer messages={messages} />
       <div className="w-[80%] mx-auto my-10">
         <div className="flex items-center relative">
           <input
