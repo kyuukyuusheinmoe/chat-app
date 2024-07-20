@@ -20,7 +20,6 @@ export default function middleware(request: NextRequest) {
         case GOOGLE_CALLBACK_PATH: return;
         
         default:  { 
-          console.log ('xxx current path ',request.nextUrl.pathname, !token?.value )
           if (!token?.value)
             return NextResponse.redirect(new URL(AUTH_PATH, request.url))
           };
