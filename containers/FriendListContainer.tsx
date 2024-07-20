@@ -3,7 +3,8 @@ import { updateRooms, updateActiveRoom } from "@/store/ChatRoomReducer";
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import { RootState } from "@/store";
-
+import useSWR from "swr";
+import { messageListFetcher } from "@/services/messageService";
 
 const FriendListContainer = ({
   data,
@@ -11,20 +12,35 @@ const FriendListContainer = ({
   data: { id: number; name?: string | undefined; email: string }[];
 }) => {
   const dispatch = useDispatch();
-  const { activeRoom } = useSelector((state: RootState) => state.chatRoom);
+  const { rooms, activeRoom } = useSelector(
+    (state: RootState) => state.chatRoom
+  );
+  const { data: messages } = useSWR(
+    activeRoom?.id ? `/message/${activeRoom?.id}` : null,
+    messageListFetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
 
   useEffect(() => {
     if (data.length > 0) {
-      dispatch(updateRooms(data));
+      dispatch(
+        updateActiveRoom({ ...data[0], messages: messages?.data || [] })
+      );
     }
-  }, [data]);
+  }, []);
 
   const handleUserItemClick = async (group: {
     id: number;
     name?: string;
     email: string;
   }) => {
-    dispatch(updateActiveRoom(group));
+    const data = await messageListFetcher(`/message/${group.id}`);
+    if (data.success) {
+      dispatch(updateActiveRoom({ ...group, messages: data?.data || [] }));
+    }
   };
 
   return (
