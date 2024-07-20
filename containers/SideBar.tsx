@@ -8,9 +8,16 @@ import { friendListFetcher } from "@/services/userService";
 const SideBar = ({}) => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  const { data } = useSWR("/group/user", friendListFetcher);
+  const { data, mutate: friendListMutate } = useSWR(
+    "/group/user",
+    friendListFetcher
+  );
 
   console.log("xxx swr data ", data);
+
+  const onSearchHandle = (searchingStatus: boolean) => {
+    setIsSearching(searchingStatus);
+  };
 
   return (
     <div
@@ -58,7 +65,10 @@ const SideBar = ({}) => {
           </div>
         </>
       ) : (
-        <SideSearchContainer />
+        <SideSearchContainer
+          onSearchHandle={onSearchHandle}
+          friendListMutate={friendListMutate}
+        />
       )}
     </div>
   );
