@@ -29,7 +29,7 @@ const SideSearchContainer = ({
           setFriendList(result.data);
         }
       }
-    }, 2000);
+    }, 1500);
   };
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const SideSearchContainer = ({
   const handleCreateRoom = async () => {
     const res = await createChatRoom({
       name: `Group with ${selectedFriends
-        ?.map((id) => friendList[id].name)
+        ?.map((id) => friendList[id]?.name)
         ?.join(",")}`,
       members: selectedFriends,
     });
@@ -93,7 +93,7 @@ const SideSearchContainer = ({
               className="p-2 bg-accGreen rounded"
               onClick={handleCreateRoom}
               disabled={selectedFriends.length <= 0}>
-              Create
+              Connect
             </button>
           </div>
         </>

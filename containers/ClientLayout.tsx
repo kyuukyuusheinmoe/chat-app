@@ -8,7 +8,7 @@ import store from "@/store";
 const ClientLayout = () => {
   return (
     <Provider store={store}>
-      <div className="flex">
+      <div className="w-full flex">
         <SideBar />
         <MainContentArea />
       </div>

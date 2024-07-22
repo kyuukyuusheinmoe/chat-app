@@ -8,9 +8,7 @@ import useSocket from "@/hooks/useSocket";
 import { MessageProp } from "@/utils/types";
 
 const MainContentArea = () => {
-  const {activeRoom } = useSelector(
-    (state: RootState) => state.chatRoom
-  );
+  const { activeRoom } = useSelector((state: RootState) => state.chatRoom);
   const inputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
   const [localmessages, setLocalMessages] = useState<MessageProp[]>(
@@ -23,7 +21,6 @@ const MainContentArea = () => {
     if (!socket.current) return;
 
     socket.current.on("my_message", (message: MessageProp) => {
-
       setLocalMessages((messages) => [...messages, message]);
     });
 
@@ -57,7 +54,7 @@ const MainContentArea = () => {
   }, [localmessages]);
 
   return (
-    <div className="h-screen bg-middle flex flex-col relative">
+    <div className="w-full h-screen bg-middle flex flex-col relative">
       {/** Chat Message List */}
 
       <MessageListContainer
